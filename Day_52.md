@@ -38,7 +38,7 @@ WITH cte_time_periods AS(
                WHEN CAST(strftime('%w',timestamp) AS INT)  = 1  THEN 'Monday'
                WHEN CAST(strftime('%w',timestamp) AS INT)  = 2  THEN 'Tuesday'
                WHEN CAST(strftime('%w',timestamp) AS INT)  = 3  THEN 'Wednesday'
-               WHEN CAST(strftime('%w',timestamp) AS INT)  = 4  THEN 'Thrusday'
+               WHEN CAST(strftime('%w',timestamp) AS INT)  = 4  THEN 'Thursday'
                WHEN CAST(strftime('%w',timestamp) AS INT)  = 5  THEN 'Friday'
                WHEN CAST(strftime('%w',timestamp) AS INT)  = 6  THEN 'Saturday'
             END AS week_day,
