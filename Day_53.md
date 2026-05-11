@@ -33,8 +33,13 @@ SELECT CASE CAST(strftime('%w',customer_placed_order_datetime) AS INT)
             WHEN 5  THEN 'Friday'
             WHEN 6  THEN 'Saturday'
         END AS week_day,
+
        strftime('%H',customer_placed_order_datetime) AS order_hour, 
+
        ROUND(AVG(order_total + tip_amount -discount_amount -refunded_amount),2) AS net_earings
+
   FROM doordash_delivery
+
  GROUP BY strftime('%w',customer_placed_order_datetime), strftime('%H',customer_placed_order_datetime)
+ 
  ORDER BY week_day, order_hour;
