@@ -23,23 +23,48 @@ The weekday text label comes from strftime('%w'), and the hour comes from strfti
 
 ## SQL Solution
 ```sql
+SELECT 
+    CASE CAST(strftime('%w', customer_placed_order_datetime) AS INT)
+        WHEN 0 THEN 'Sunday'
+        WHEN 1 THEN 'Monday'
+        WHEN 2 THEN 'Tuesday'
+        WHEN 3 THEN 'Wednesday'
+        WHEN 4 THEN 'Thursday'
+        WHEN 5 THEN 'Friday'
+        WHEN 6 THEN 'Saturday'
+    END AS week_day,
 
-SELECT CASE CAST(strftime('%w',customer_placed_order_datetime) AS INT)
-            WHEN 0  THEN 'Sunday'
-            WHEN 1  THEN 'Monday'
-            WHEN 2  THEN 'Tuesday'
-            WHEN 3  THEN 'Wednesday'
-            WHEN 4  THEN 'Thrusday'
-            WHEN 5  THEN 'Friday'
-            WHEN 6  THEN 'Saturday'
-        END AS week_day,
+    strftime('%H', customer_placed_order_datetime) AS order_hour,
 
-       strftime('%H',customer_placed_order_datetime) AS order_hour, 
+    ROUND(
+        AVG(order_total + tip_amount 
+            - discount_amount 
+            - refunded_amount),
+        2
+    ) AS net_earnings
 
-       ROUND(AVG(order_total + tip_amount -discount_amount -refunded_amount),2) AS net_earings
+FROM doordash_delivery
 
-  FROM doordash_delivery
+GROUP BY 
+    strftime('%w', customer_placed_order_datetime),
+    strftime('%H', customer_placed_order_datetime)
 
- GROUP BY strftime('%w',customer_placed_order_datetime), strftime('%H',customer_placed_order_datetime)
- 
- ORDER BY week_day, order_hour;
+ORDER BY 
+    CAST(strftime('%w', customer_placed_order_datetime) AS INT),
+    order_hour;
+```
+
+## Output
+
+| week_day  | order_hour | net_earnings |
+|-----------|------------|--------------|
+| Friday    | 14         | 37.50        |
+| Monday    | 10         | 50.00        |
+| Monday    | 12         | 28.00        |
+| Saturday  | 13         | 62.00        |
+| Sunday    | 09         | 75.00        |
+| Thursday  | 21         | 52.50        |
+| Tuesday   | 08         | 32.00        |
+| Tuesday   | 19         | 56.00        |
+| Wednesday | 11         | 39.00        |
+| Wednesday | 15         | 64.00        |
