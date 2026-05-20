@@ -20,9 +20,10 @@ To get the total sales revenue for Samantha and Lisa, I filtered the table using
 SELECT salesperson, SUM(sales_revenue) as total_sales_revenue
   FROM sales_performance
  WHERE salesperson IN ('Samantha','Lisa');
+
 ```
 
-##🎯 Pattern: Filtering + Aggregation (SUM)
+## 🎯 Pattern: Filtering + Aggregation (SUM)
 
 This pattern is used when you need to:
 
