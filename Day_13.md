@@ -36,7 +36,7 @@ SELECT hotel_name, reviewer_score, count(reviewer_score)
 ## 🎯Pattern: 
 GROUP BY (Aggregation)
 
-Overall Pattern Explanation
+Why this pattern fits:
 
 This pattern is used when you need to summarize data within a single table.
 
