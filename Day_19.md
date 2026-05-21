@@ -22,31 +22,45 @@ To find users who had a session and placed orders on the same day, I joined the 
 
 ## SQL Solution
 ```sql
-CREATE TABLE sessions(
-    session_id INT PRIMARY KEY,
-    user_id INT,
-    session_date DATETIME
-);
-
-INSERT INTO sessions(session_id, user_id, session_date) VALUES (1, 1, '2024-01-01 00:00:00'),(2, 2, '2024-01-02 00:00:00'),(3, 3, '2024-01-05 00:00:00'),(4, 3, '2024-01-05 00:00:00'),(5, 4, '2024-01-03 00:00:00'),(6, 4, '2024-01-03 00:00:00'),(7, 5, '2024-01-04 00:00:00'),(8, 5, '2024-01-04 00:00:00'),(9, 3, '2024-01-05 00:00:00'),(10, 5, '2024-01-04 00:00:00');
-
-CREATE TABLE order_summary (
-    order_id INT PRIMARY KEY,
-    user_id INT,
-    order_value INT,
-    order_date DATETIME
-);
-
-INSERT INTO order_summary (order_id, user_id, order_value, order_date) VALUES (1, 1, 152, '2024-01-01 00:00:00'),(2, 2, 485, '2024-01-02 00:00:00'),(3, 3, 398, '2024-01-05 00:00:00'),(4, 3, 320, '2024-01-05 00:00:00'),(5, 4, 156, '2024-01-03 00:00:00'),(6, 4, 121, '2024-01-03 00:00:00'),(7, 5, 238, '2024-01-04 00:00:00'),(8, 5, 70, '2024-01-04 00:00:00'),(9, 3, 152, '2024-01-05 00:00:00'),(10, 5, 171, '2024-01-04 00:00:00');
-
-SELECT * FROM sessions;
-
-SELECT * FROM order_summary;
 
 SELECT s.user_id, s.session_date, count(*) AS num_of_orders, SUM(order_value) AS total_order_value
   FROM sessions AS s
   JOIN order_summary AS o
     ON s.user_id = o.user_id AND s.session_date = o.order_date
  GROUP BY s.user_id, s.session_date;
+```
+
+## Output
+
+| user_id | session_date           | num_of_orders | total_order_value |
+|---------|-------------------------|----------------|--------------------|
+| 1       | 2024-01-01 00:00:00     | 1              | 152                |
+| 2       | 2024-01-02 00:00:00     | 1              | 485                |
+| 3       | 2024-01-05 00:00:00     | 9              | 2610               |
+| 4       | 2024-01-03 00:00:00     | 4              | 554                |
+| 5       | 2024-01-04 00:00:00     | 9              | 1437               |
+
+
+## 🎯 Pattern: JOIN + GROUP BY
+
+Why this pattern matters
+
+This is a classic Hard‑level SQL pattern because it requires:
+
+- Joining two event tables
+- Matching on user_id AND date
+- Grouping by user‑day
+- Aggregating both count and sum
+- Ensuring only user‑days with orders appear
+
+This pattern appears in:
+
+- sessionization problems
+- funnel analysis
+- daily active user metrics
+- order‑session matching
+- marketing attribution
+
+It’s one of the most important SQL patterns for analytics interviews.
 
  
